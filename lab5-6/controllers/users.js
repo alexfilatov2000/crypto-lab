@@ -5,7 +5,6 @@ const {registerSchema, loginSchema, remindPswSchema} = require('../model');
 const nodemailer = require('nodemailer')
 const {myInfo} = require('../config');
 const {resetPasswordTemplate} = require('../mailer');
-const crypto = require('crypto')
 const {getCryptoPassword, verifyPassword, encryptWithAES} = require("../use-cases/crypto");
 
 module.exports = class UserController {
