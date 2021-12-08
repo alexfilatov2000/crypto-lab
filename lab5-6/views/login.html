@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Turn around</title>
+    <meta name="description" content="t06">
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<h1 class="first">Secure Registration.</h1>
+<h1 class="second">SIGN IN</h1>
+<form method="post" action="/login">
+    <% if (error !== ''){%>
+    <div id="Err"><%= error%></div>
+    <% }%>
+
+    <div class="Em dva">
+        <label for="login"></label>
+        <input type="text" id="login" name="login" placeholder="Login">
+    </div>
+
+    <div class="Em three">
+        <label for="password"></label>
+        <input type="password" id="password" name="password" placeholder="Password">
+    </div>
+
+    <div class="last">
+        <input class="but" type="submit" value="SEND">
+    </div>
+
+
+</form>
+
+</body>
+
+</html>

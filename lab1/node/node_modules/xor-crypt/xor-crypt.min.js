@@ -1,0 +1,6 @@
+/*!
+ * XOR Crypt v1.1.1 - http://github.com/RobLoach/xor-crypt
+ * @license MIT
+ *   http://opensource.org/licenses/MIT
+ */
+(function(e,t){"use strict";if(typeof define==="function"&&define.amd){define([],t)}else if(typeof exports==="object"){module.exports=t()}else{e.xorCrypt=t()}})(this,function(){"use strict";return function e(t,r){var n="";if(!r){r=6}for(var o=0;o<t.length;++o){n+=String.fromCharCode(r^t.charCodeAt(o))}return n}});
