@@ -2,7 +2,7 @@ const argon2 = require('argon2');
 const shortid = require('shortid');
 const fs = require('fs').promises;
 const {User} = require('../models/user');
-const {registerSchema, loginSchema, remindPswSchema} = require('../model');
+const {registerSchema, loginSchema, remindPswSchema, validatePassword} = require('../model');
 const nodemailer = require('nodemailer')
 const {myInfo} = require('../config');
 const {resetPasswordTemplate} = require('../mailer');
@@ -28,7 +28,7 @@ module.exports = class UserController {
     static async registerPost(ctx) {
         const data = {...ctx.request.body};
         const user = new User();
-        const { error } = registerSchema.validate(data);
+        let { error } = registerSchema.validate(data);
 
         if (error) {
             ctx.session.error = error.message;
@@ -43,6 +43,12 @@ module.exports = class UserController {
 
         if (await user.findByLogin(data.login)) {
             ctx.session.error = 'Login is already exist';
+            return ctx.redirect('/register');
+        }
+
+        const validate = validatePassword(data.password)?.error
+        if (validate) {
+            ctx.session.error = validate.message;
             return ctx.redirect('/register');
         }
 

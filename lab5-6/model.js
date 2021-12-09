@@ -1,4 +1,21 @@
 const Joi = require('joi');
+const passwordComplexity = require("joi-password-complexity");
+
+
+function validatePassword(password) {
+    const complexityOptions = {
+        min: 8,
+        max: 64,
+        lowerCase: 1,
+        upperCase: 1,
+        numeric: 1,
+        symbol: 1,
+    };
+
+    return passwordComplexity(complexityOptions).validate(password);
+}
+
+module.exports.validatePassword = validatePassword
 
 module.exports.registerSchema = Joi.object({
     name: Joi.string().min(3).required(),
