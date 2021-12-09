@@ -43,7 +43,7 @@ module.exports = class UserController {
             const cryptoPassword = await getCryptoPassword(data.password);
             data.phone = await encryptWithAES(data.phone)
 
-            await user.save({password: cryptoPassword, ...data});
+            await user.save({...data, password: cryptoPassword});
             ctx.session.error = '';
             ctx.session.loginErr = ''
             ctx.redirect('/login')

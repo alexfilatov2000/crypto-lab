@@ -1,6 +1,5 @@
 const crypto = require('crypto')
 const argon2 = require('argon2');
-const CryptoJS = require("crypto-js");
 const {decrypt_kms, encrypt_kms} = require('./aws')
 
 async function encryptWithAES(field) {
@@ -16,14 +15,15 @@ async function decryptAES(field) {
 async function getCryptoPassword(password){
     const sha512 = crypto.createHash('sha512').update(password).digest('hex');
     const hash = await argon2.hash(sha512);
-    return CryptoJS.AES.encrypt(hash, 'one').toString();
+    const {CiphertextBlob} = await encrypt_kms(hash)
+    return CiphertextBlob.toString('base64');
 }
 
 async function verifyPassword({hash, password}){
     const sha512 = crypto.createHash('sha512').update(password).digest('hex');
 
-    const bytes  = CryptoJS.AES.decrypt(hash, 'one');
-    const originalPassword = bytes.toString(CryptoJS.enc.Utf8);
+    const bytes = await decrypt_kms(hash);
+    const originalPassword = bytes.Plaintext.toString('ascii');
 
     return argon2.verify(originalPassword, sha512);
 }
