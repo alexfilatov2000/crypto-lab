@@ -1,5 +1,6 @@
 const argon2 = require('argon2');
 const shortid = require('shortid');
+const fs = require('fs').promises;
 const {User} = require('../models/user');
 const {registerSchema, loginSchema, remindPswSchema} = require('../model');
 const nodemailer = require('nodemailer')
@@ -28,27 +29,40 @@ module.exports = class UserController {
         const data = {...ctx.request.body};
         const user = new User();
         const { error } = registerSchema.validate(data);
+
         if (error) {
             ctx.session.error = error.message;
-            ctx.redirect('/register');
-        } else if (await user.findByEmail(data.email)){
+            return ctx.redirect('/register');
+        }
+
+        if (await user.findByEmail(data.email)){
             // Checking if the user is already in the database
             ctx.session.error = 'Email is already exist';
-            ctx.redirect('/register');
-        } else if (await user.findByLogin(data.login)) {
-            ctx.session.error = 'Login is already exist';
-            ctx.redirect('/register');
-        } else {
-            // Crypto password
-            const cryptoPassword = await getCryptoPassword(data.password);
-            data.phone = await encryptWithAES(data.phone)
-
-            await user.save({...data, password: cryptoPassword});
-            ctx.session.error = '';
-            ctx.session.loginErr = ''
-            ctx.redirect('/login')
+            return ctx.redirect('/register');
         }
+
+        if (await user.findByLogin(data.login)) {
+            ctx.session.error = 'Login is already exist';
+            return ctx.redirect('/register');
+        }
+
+        const commonPasswords = (await fs.readFile('etc/commonPasswords.txt', 'utf8'))
+            .split('\n')
+
+        if (commonPasswords.includes(data.password)) {
+            ctx.session.error = 'Your password is too weak';
+            return ctx.redirect('/register');
+        }
+
+        const cryptoPassword = await getCryptoPassword(data.password);
+        data.phone = await encryptWithAES(data.phone)
+
+        await user.save({...data, password: cryptoPassword});
+        ctx.session.error = '';
+        ctx.session.loginErr = '';
+        ctx.redirect('/login');
     }
+
     static async loginPost(ctx) {
         const data = {...ctx.request.body};
         const user = new User();

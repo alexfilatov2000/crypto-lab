@@ -32,13 +32,8 @@ class User{
         await this.pool.query(`DELETE FROM ${this.table} WHERE id=${id}`)
     }
     async save(obj){
-        try {
-            await this.pool.query(`INSERT INTO ${this.table} (name, login, email, password, phone)
+        await this.pool.query(`INSERT INTO ${this.table} (name, login, email, password, phone)
             VALUES("${obj.name}", "${obj.login}", "${obj.email}", "${obj.password}", "${obj.phone}")`);
-        } catch (e) {
-            console.log(e);
-        }
-
     }
 
 }
