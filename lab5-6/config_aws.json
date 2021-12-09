@@ -1,8 +1,0 @@
-{
-    "AWS": {
-        "ACCESS_KEY_ID": "AKIA5AHBZ4J7K72V7CGC",
-        "ACCESS_SECRET_KEY": "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",
-        "REGION": "us-east-1",
-        "KMS_KEY_ID": "5d428a9d-6854-4887-9770-04663ec9e090"
-    }
-}
