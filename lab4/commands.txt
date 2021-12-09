@@ -4,14 +4,14 @@ hashcat -m 0 -a 0 md5_without_salt.csv rockyou.txt
 hashcat -m 0 -a 0 md5_without_salt.csv --show > output_md5_dictionary.txt
 
 2)Brute force md5
-hashcat -m 0 -a 3 md5_without_salt.csv rockyou.txt
+hashcat -m 0 -a 3 md5_without_salt.csv
 hashcat -m 0 -a 3 md5_without_salt.csv --show
 
 3)Dictionary crack bcryept
 hashcat -m 3200 -a 0 2bcrypt.txt rockyou.txt
 hashcat -m 3200 -a 0 2bcrypt.txt --show
 
-4)Dictionary crack bcryept
-hashcat -m 3200 -a 3200 2bcrypt.txt rockyou.txt
+4)Brute force bcryept
+hashcat -m 3200 -a 3200 2bcrypt.txt
 hashcat -m 3200 -a 3200 2bcrypt.txt --show
 
