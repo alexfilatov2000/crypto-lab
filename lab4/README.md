@@ -2,6 +2,19 @@
 
 ### MD5 crack
 
+- Part 1
+
+To create 2 table with hashed passwords was chosen md5 for first csv table and arogon2 for second.
+So each table contain 100_000 hashed passwords.
+90% of them contain passwords from commonPasswords.txt(the most useful password).
+1% was really random passwords
+10% was includes of the top 100 most common passwords
+And the rest of the passwords was generated in such a way as to be human-readable 
+
+
+
+
+- Part 2
 ####Dictionary
 <div>
 <img src="images/md5-dictionary.png">
