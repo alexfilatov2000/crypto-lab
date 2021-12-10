@@ -68,6 +68,7 @@ async function main(opts) {
     }
 
     const textParts = getTextParts(cipheredText, key_length)
+    console.log(textParts)
 
     const theMostFrequentChars = textParts.map((text, index) => {
         const charsWithFrequencyOrdered = getCharsWithFrequencyOrdered(text);

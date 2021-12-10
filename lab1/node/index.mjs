@@ -3,48 +3,31 @@ const cipheredText = '7958401743454e1756174552475256435e59501a5c524e176f78651754
 function main() {
 
     for (let i = 1; i<256; i++) {
-        ///const decodedCypher = decryptq(String.fromCharCode(i), cipheredText);
-        const decodedCypher = decrypt(cipheredText,String.fromCharCode(i));
+        const decodedCypher = decrypt({
+            cyphertext: cipheredText,
+            key: String.fromCharCode(i)
+        })
+
         console.log(i, decodedCypher, '\n');
     }
 }
 
 main()
 
-
-function decrypt(cypherString, key) {
-
-    let plainText = '';
-    const cypherArray = [];
-    let i;
-    // Group cypher by 2 hex char (16bits) into array
-    for (i = 0; i < cypherString.length; i = i + 2) {
-        cypherArray.push(cypherString[i] + cypherString[i + 1]);
-
-    }
-
-    // XOR Decrypt with provided cypher text and key
-    for (i = 0; i < cypherArray.length; i++) {
-        const hex = cypherArray[i];
-        const dec = parseInt(hex, 16);
-        const keyPointer = i % key.length;
-        const asciiCode = dec ^ (key[keyPointer]).charCodeAt(0);
-        plainText += String.fromCharCode(asciiCode);
-    }
-    return plainText;
-
-}
-
-function decryptq(key, cyphertext) {
+function decrypt({key, cyphertext}) {
     try {
         cyphertext = cyphertext.match(/.{1,2}/g).map(x => parseInt(x, 16));
         let plaintext = [];
         for (let i = 0; i < cyphertext.length; i++) {
             plaintext.push((cyphertext[i] ^ key.charCodeAt(Math.floor(i % key.length))).toString(16).padStart(2, '0'));
         }
+        // console.log(plaintext);
         return decodeURIComponent('%' + plaintext.join('').match(/.{1,2}/g).join('%'));
     }
     catch(e) {
         return false;
     }
 }
+
+//Now try a repeating-key XOR cipher. E.g. it should take a string “hello world” and, given the key is “key”, xor the first letter “h” with “k”, then xor “e” with “e”, then “l” with “y”, and then xor next char
+// “l” with “k” again, then “o” with “e” and so on. You may use an index of coincidence, Hamming distance, Kasiski examination, statistical tests or whatever method you feel would show the best result.
