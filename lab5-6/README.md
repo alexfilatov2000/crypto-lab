@@ -47,3 +47,14 @@
 
 - Stealing AWS KMS credentials and key id which allows to decrypt any data encryption key
 - OS penetration and stealing database credentials
+
+## lab 7 report
+
+Script which is generating certificate can be found in `generate-cert.sh`
+
+### Tools and technologies
+
+- *openssl* util is used for certificates generation
+- RSA 2048 cipher was chosen
+- TLSv1.3 is used for the server
+- connection cipher is TLS_AES_256_GCM_SHA384
