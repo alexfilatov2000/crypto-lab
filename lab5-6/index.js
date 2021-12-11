@@ -6,6 +6,17 @@ const session = require('koa-session');
 const render = require('koa-ejs');
 const path = require('path');
 const { restRouter } = require('./routes/users');
+const fs = require('fs');
+const https = require('https');
+
+const options = {
+    key: fs.readFileSync('keys/localhost.key'),
+    cert: fs.readFileSync('keys/localhost.crt'),
+    ciphers: 'TLS_AES_256_GCM_SHA384',
+    honorCipherOrder: true,
+    minVersion: "TLSv1.3",
+    maxVersion: "TLSv1.3"
+};
 
 const app = new Koa();
 const PORT = 3000;
@@ -34,16 +45,15 @@ app.use(async(ctx, next) => {
     } catch (err) {
         ctx.status = err.status || 500
         if (ctx.status === 404) {
-            //Your 404.jade
             await ctx.render('404')
         } else {
-            //other_error jade
             await ctx.render('other_error')
         }
     }
 })
 
 
-app.listen(PORT, () => {
-    console.log(`Koa started on PORT ${PORT}`);
-});
+https.createServer(options, app.callback())
+    .listen(PORT, () => {
+        console.log(`Koa started on PORT ${PORT}`);
+    });
